@@ -73,10 +73,10 @@ function announceWinner() {
 	$("#game-over").show("drop", 500);
 
 	if (gameWinner === "player") {
-		$("#game-outcome").text("You won");
+		$("#game-outcome").text("Ganaste");
 	} else if (gameWinner === "dealer") {
-		$("#game-outcome").text("Dealer won");
+		$("#game-outcome").text("Gana Crupier");
 	} else if (gameWinner === "tie") {
-		$("#game-outcome").text("You tied");
+		$("#game-outcome").text("Empataron");
 	}
 }

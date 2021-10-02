@@ -130,7 +130,7 @@ function reduceAcesValue(deck) {
 				playerSplitHandTotal -= 10;
 			}
 			updateVisibleHandTotals();
-			Materialize.toast("Your ace value changed from 11 to 1", 1500);
+			Materialize.toast("Tu valor de as cambió de 11 a 1", 1500);
 		}	
 	}
 }

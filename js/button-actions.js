@@ -3,11 +3,11 @@
 var startGame = function() {
 	getCards();
 	if (currentWager === 0) {
-		Materialize.toast("You must select a bet to play", 1000);
+		Materialize.toast("Debes seleccionar una apuesta para jugar", 1000);
 	} else if (currentChipBalance < 10) {
-		Materialize.toast("You're out of chips! Reset the game to continue" , 2000);
+		Materialize.toast("¡Te quedaste sin fichas! Reinicia el juego para continuar" , 2000);
 	} else if (currentChipBalance < currentWager) {
-		Materialize.toast("Insufficient chip balance, please select a lower bet" , 1500);
+		Materialize.toast("Saldo de fichas insuficiente, seleccione una apuesta menor" , 1500);
 	} else {
 		currentChipBalance -= currentWager;
 		updateVisibleChipBalances();
@@ -91,7 +91,7 @@ var split = function() {
 
 function doubleDown() {
 	if (currentChipBalance - currentWager <= 0) {
-		Materialize.toast("Insufficient chip balance" , 1000);
+		Materialize.toast("Balance de fichas insuficiente" , 1000);
 	}
 	else {
 		currentChipBalance -= currentWager; //subtracts the same value again from current balance
@@ -119,7 +119,7 @@ function newGame() {
 	playerSplitStatus = "start";
 
 	if (currentWager === 0) { 
-		Materialize.toast("You must select a bet to play", 1000);
+		Materialize.toast("Debes seleccionar una apuesta para jugar", 1000);
 	} else {	
 		$(playerSplitGameBoard).hide();
 		$(".split-hand-total").hide();
