@@ -1,6 +1,8 @@
 // This file contains key interactions that will occur after the player has clicked a button
 
 var startGame = function() {
+	var myAudio = document.getElementById("play");
+	myAudio.paused ? myAudio.play() : myAudio.pause();
 	getCards();
 	if (currentWager === 0) {
 		Materialize.toast("Debes seleccionar una apuesta para jugar", 1000);
@@ -130,8 +132,6 @@ function newGame() {
 		playerGameBoard.empty();
 		playerSplitGameBoard.empty();
 		updateVisibleHandTotals();
-		var myAudio = document.getElementById("play");
-		myAudio.paused ? myAudio.play() : myAudio.pause();
 		startGame();	
 	}
 }
