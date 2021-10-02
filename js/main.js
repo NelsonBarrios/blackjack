@@ -1,4 +1,4 @@
-// Starting game board values
+// Valores iniciales del tablero de juego
 var cardsInDeck;
 
 $( document ).ready(function() {

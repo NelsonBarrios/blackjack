@@ -1,4 +1,4 @@
-// This file contains logic for what happens after the round is determined to be over
+// Este archivo contiene la lógica de lo que sucede después de que se determina que la ronda ha terminado.
 
 function gameOver() {
 	isGameOver = true;
@@ -38,23 +38,23 @@ function gameOver() {
 		}
 	}
 	updateChipBalance();
-	setTimeout(announceWinner, 2500); // Slight delay to give time to see the final cards play out
+	setTimeout(announceWinner, 2500); // Ligero retraso para dar tiempo a ver cómo se juegan las cartas finales.
 } 
 
 function updateChipBalance() {
 	if (gameWinner === "jugador") {
-		// Blackjack is 3:2 payout (and cannot occur on a split deck):
+		// El blackjack tiene un pago de 3:2 (y no puede ocurrir en un mazo dividido):
 		if (splitGame === false && playerHasAce === true && playerHandTotal === 21 && playerHand.length === 2) {
 			currentChipBalance += currentWager*(3/2) + currentWager;
-		// Otherwise it's a 1:1 payout:
+		// De lo contrario, es un pago 1: 1:
 		} else {
 			currentChipBalance += currentWager*2;
 		}
-	// If you tie, get just original wager back (no win or loss)
+	// Si empatas, recupera solo la apuesta original (sin ganar ni perder)
 	} else if (gameWinner === "empatar") {
 		currentChipBalance += currentWager;		
 	}
-	// Note: if dealer wins, nothing happens to player chip balance as their wager was already removed from it
+	// Nota: si el crupier gana, no pasa nada con el saldo de fichas del jugador, ya que su apuesta ya fue eliminada.
 	updateVisibleChipBalances();
 }
 
@@ -66,9 +66,9 @@ function announceWinner() {
 	enlargeDeck(playerSplitGameBoard, playerSplitHandTotalDisplay);
 	enlargeDeck(playerGameBoard, playerHandTotalDisplay);
 
-	// Move betting options from welcome screen to game over screen to play again
+	// Mueva las opciones de apuestas de la pantalla de bienvenida a la pantalla de finalización del juego para volver a jugar
 	$("#wager-options").appendTo($("#game-over")); 
-	$(playAgainButton).appendTo($("#wager-options")); // to move to bottom of container
+	$(playAgainButton).appendTo($("#wager-options")); // para mover al fondo del contenedor
 	$(startButton).hide(); 
 	$("#game-over").show("drop", 500);
 

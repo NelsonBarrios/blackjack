@@ -1,4 +1,4 @@
-// This file contains key interactions that will occur after the player has clicked a button
+// Este archivo contiene interacciones clave que ocurrirán después de que el jugador haya hecho clic en un botón.
 
 var startGame = function() {
 	var myAudio = document.getElementById("play");
@@ -66,24 +66,24 @@ var split = function() {
 	playerSplitHand.push(splitCard);
 	var cardImage = $("#player-card-1").attr("id", "playerSplit-card-0");
 
-	cardImage.hide(); // Hide it at first to allow for the transition to occur
-	// This is the first card in the deck, so want to cancel out the previous offset/stacking and have it go to the initial normal spot
+	cardImage.hide(); // Ocultarlo al principio para permitir que ocurra la transición
+	// Esta es la primera carta en la baraja, así que desea cancelar el desplazamiento / apilamiento anterior y hacer que vaya al lugar normal inicial.
 	cardImage.appendTo($(playerSplitGameBoard)).offset({left: 60}).css("margin-right", "auto").show();
 
 	currentChipBalance -= currentWager; 
 	currentWager = currentWager * 2;
 	updateVisibleChipBalances();
 
-	// Then, deal 1 new card for each newly split deck
+	// Luego, reparte 1 carta nueva por cada mazo recién dividido.
 	currentTurn = "jugador";
 	dealCard(playerHand, playerGameBoard);
 	currentTurn = "jugadorDividido";
 	dealCard(playerSplitHand, playerSplitGameBoard);
 
-	// Make split button no longer clickable as in this game you can only split once
+	// Hacer que el botón de división ya no se pueda hacer clic, ya que en este juego solo puedes dividir una vez
 	disableButton(splitButton);
 
-	// Shrink the inactive deck to both signal what deck they are playing and to make room on the board
+	// Reducir el mazo inactivo tanto para indicar qué mazo están jugando como para hacer espacio en el tablero
 	setTimeout(function(){
 		scaleDownDeck(playerSplitGameBoard, playerSplitHandTotalDisplay);
 		currentTurn = "jugador"; 
@@ -96,7 +96,7 @@ function doubleDown() {
 		Materialize.toast("Balance de fichas insuficiente" , 1000);
 	}
 	else {
-		currentChipBalance -= currentWager; //subtracts the same value again from current balance
+		currentChipBalance -= currentWager; // resta el mismo valor nuevamente del saldo actual
 		currentWager = currentWager * 2;
 		updateVisibleChipBalances();
 		disableButton(doubleDownButton);

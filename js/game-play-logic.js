@@ -1,15 +1,15 @@
-// This file contains the main logic utilized during active gameplay, before the game is declared over
+// Este archivo contiene la lógica principal utilizada durante el juego activo, antes de que el juego se declare terminado.
 
 function dealCard(hand, location) {
 	var cardDrawn = cardsInDeck.pop();
 	hand.push(cardDrawn);
 	var index = hand.length - 1;
 
-	// Create card image for card, hide initially so it doesn't impact transition
+	// Cree una imagen de tarjeta para la tarjeta, ocúltela inicialmente para que no afecte la transición
 	var cardImage = $("<img>").attr("class", "card").attr("src", "img/" + hand[index].src).hide();
 	cardImage.attr("id", currentTurn + "-card-" + index);
 
-	// To create stacked card effect
+	// Para crear un efecto de cartas apiladas
 	if (index === 0) {
 		cardImage.appendTo($(location)).show();
 	} else if (index > 0) {
@@ -18,7 +18,7 @@ function dealCard(hand, location) {
 	if (hand[index].name === "as" && currentTurn != "crupier") {
 		playerHasAce = true;
 	}
-	// Note: tried to dry this out by putting totals as a param but couldn't get it working yet
+	// Nota: traté de secar esto poniendo totales como parámetro, pero aún no pude hacerlo funcionar
 	if (currentTurn === "jugador") {
 		playerHandTotal += hand[index].value;
 	} else if (currentTurn === "jugadorDividido") {
@@ -26,7 +26,7 @@ function dealCard(hand, location) {
 	} else if (currentTurn === "crupier") {
 		dealerHandTotal += hand[index].value;
 	}	
-	// Second card only for dealer should show face down
+	// La segunda carta solo para el crupier, debe mostrarse boca abajo
 	if (dealerHand.length === 2 && currentTurn === "crupier") {
 		cardImage.attr("src", "img/card_back.png");
 	}
@@ -35,14 +35,14 @@ function dealCard(hand, location) {
 }
 
 function evaluateGameStatus() {
-	// Player can only split or double down after first 2 cards drawn
+	// El jugador solo puede dividir o doblar después de las primeras 2 cartas robadas
 	if (playerHand.length === 3 || dealerStatus === "pedir") {
 		disableButton(doubleDownButton);
 		disableButton(splitButton);
 	}
 	if (currentTurn != "crupier") {
 		if (playerHasAce === true) {
-			if (currentTurn === "jugador") {  // Dry out by having params in here
+			if (currentTurn === "jugador") {  // Seque teniendo parametros aquí
 				reviewAcesValue(playerHand, playerHandTotal);
 			} else if (currentTurn === "jugadorDividido") {
 				reviewAcesValue(playerSplitHand, playerSplitHandTotal);
@@ -59,7 +59,7 @@ function evaluateGameStatus() {
 
 // El propósito de esta función es detectar cuándo se debe cambiar un turno sin el jugador
 // necesita hacer clic en "pararse". Este también es un paso importante para determinar cuál es el próximo paso.
-// es si hay un mazo dividido.
+// És si hay un mazo dividido.
 function isPlayerDone() {
 	if (splitGame === false && playerHandTotal >= 21) {
 		gameOver();
@@ -67,14 +67,14 @@ function isPlayerDone() {
 		if (currentTurn === "jugador") {
 			if (playerHandTotal === 21) {
 				gameOver();
-			// If it's a split game, we can't just game over on the first hand if the player goes over
+			// Si es un juego dividido, no podemos simplemente terminar el juego en la primera mano si el jugador pasa
 			} else if (playerHandTotal > 21)
 				changeHand(playerStatus); 
 		} else if (currentTurn === "jugadorDividido") {
 			if (playerSplitHandTotal === 21) {
 				gameOver();
 			} else if (playerSplitHandTotal > 21) {
-				// If the player was under 21 in their first game, the dealer should play before gameover
+				// Si el jugador tenía menos de 21 en su primer juego, el crupier debería jugar antes del final del juego.
 				if (playerHandTotal < 21) { 
 					changeHand(playerSplitStatus);
 				} else {
