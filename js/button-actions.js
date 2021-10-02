@@ -131,7 +131,7 @@ function newGame() {
 		playerSplitGameBoard.empty();
 		updateVisibleHandTotals();
 		var myAudio = document.getElementById("play");
-		return myAudio.paused ? myAudio.play() : myAudio.pause();
+		myAudio.paused ? myAudio.play() : myAudio.pause();
 		startGame();	
 	}
 }
