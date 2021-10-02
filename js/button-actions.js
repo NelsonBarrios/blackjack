@@ -130,7 +130,9 @@ function newGame() {
 		playerGameBoard.empty();
 		playerSplitGameBoard.empty();
 		updateVisibleHandTotals();
-		startGame(); 		
+		var myAudio = document.getElementById("play");
+		return myAudio.paused ? myAudio.play() : myAudio.pause();
+		startGame();	
 	}
 }
 
