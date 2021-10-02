@@ -11,30 +11,30 @@ function gameOver() {
 	disableButton(doubleDownButton);
 	if (dealerHandTotal === 21) {
 		if (playerHandTotal === 21 || playerSplitHandTotal === 21) {
-			gameWinner = "tie";
+			gameWinner = "empatar";
 		} else {
-			gameWinner = "dealer";
+			gameWinner = "crupier";
 		}
 	} else if (dealerHandTotal > 21) {
 		if (playerHandTotal <= 21) {
-			gameWinner = "player";
+			gameWinner = "jugador";
 		} else if (splitGame === true && playerSplitHandTotal <= 21) {
-			gameWinner = "player";
+			gameWinner = "jugador";
 		} else {
-			gameWinner = "tie";
+			gameWinner = "empatar";
 		}
 	} else if (dealerHandTotal < 21) {
 		if (playerHandTotal === 21  || playerSplitHandTotal === 21) {
-			gameWinner = "player";
+			gameWinner = "jugador";
 		} else if (playerHandTotal < 21 && playerHandTotal > dealerHandTotal) {
-			gameWinner = "player";
+			gameWinner = "jugador";
 		} else if (playerSplitHandTotal < 21 && playerSplitHandTotal > dealerHandTotal) {
-			gameWinner = "player";
+			gameWinner = "jugador";
 		} else if (playerSplitHandTotal < 21 && playerSplitHandTotal === dealerHandTotal ||
 			playerHandTotal < 21 && playerHandTotal === dealerHandTotal) {
-			gameWinner = "tie";
+			gameWinner = "empatar";
 		} else {
-			gameWinner = "dealer";
+			gameWinner = "crupier";
 		}
 	}
 	updateChipBalance();
@@ -42,7 +42,7 @@ function gameOver() {
 } 
 
 function updateChipBalance() {
-	if (gameWinner === "player") {
+	if (gameWinner === "jugador") {
 		// Blackjack is 3:2 payout (and cannot occur on a split deck):
 		if (splitGame === false && playerHasAce === true && playerHandTotal === 21 && playerHand.length === 2) {
 			currentChipBalance += currentWager*(3/2) + currentWager;
@@ -51,7 +51,7 @@ function updateChipBalance() {
 			currentChipBalance += currentWager*2;
 		}
 	// If you tie, get just original wager back (no win or loss)
-	} else if (gameWinner === "tie") {
+	} else if (gameWinner === "empatar") {
 		currentChipBalance += currentWager;		
 	}
 	// Note: if dealer wins, nothing happens to player chip balance as their wager was already removed from it
@@ -72,11 +72,11 @@ function announceWinner() {
 	$(startButton).hide(); 
 	$("#game-over").show("drop", 500);
 
-	if (gameWinner === "player") {
+	if (gameWinner === "jugador") {
 		$("#game-outcome").text("Ganaste");
-	} else if (gameWinner === "dealer") {
+	} else if (gameWinner === "crupier") {
 		$("#game-outcome").text("Gana Crupier");
-	} else if (gameWinner === "tie") {
+	} else if (gameWinner === "empatar") {
 		$("#game-outcome").text("Empataron");
 	}
 }

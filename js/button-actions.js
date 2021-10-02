@@ -19,14 +19,14 @@ var startGame = function() {
 		cardsInDeck.sort(function() {return 0.5 - Math.random()});
 		for (let i = 0; i <= 1; i++) {
 			setTimeout(function(){
-				currentTurn = "player";
+				currentTurn = "jugador";
 				dealCard(playerHand, playerGameBoard);
-				currentTurn = "dealer";
+				currentTurn = "crupier";
 				dealCard(dealerHand, dealerGameBoard);
 			}, i*1500);
 		}
 		setTimeout(function(){
-			currentTurn = "player";
+			currentTurn = "jugador";
 			if (playerHand.length === 2 && playerHand[0].name === playerHand[1].name) {
 				enableButton(splitButton, split);
 			}
@@ -36,19 +36,19 @@ var startGame = function() {
 }
 
 var hit = function() {
-	if (currentTurn === "player") {
-		playerStatus = "hit";
+	if (currentTurn === "jugador") {
+		playerStatus = "pedir";
 		dealCard(playerHand, playerGameBoard);
-	} else if (currentTurn === "playerSplit") {
-		playerSplitStatus = "hit";
+	} else if (currentTurn === "jugadorDividido") {
+		playerSplitStatus = "pedir";
 		dealCard(playerSplitHand, playerSplitGameBoard);
 	}
 }
 
 var stand = function() {
-	if (currentTurn === "player") {
+	if (currentTurn === "jugador") {
 		changeHand(playerStatus);
-	} else if (currentTurn === "playerSplit") {
+	} else if (currentTurn === "jugadorDividido") {
 		changeHand(playerSplitStatus);
 	}
 }
@@ -73,9 +73,9 @@ var split = function() {
 	updateVisibleChipBalances();
 
 	// Then, deal 1 new card for each newly split deck
-	currentTurn = "player";
+	currentTurn = "jugador";
 	dealCard(playerHand, playerGameBoard);
-	currentTurn = "playerSplit";
+	currentTurn = "jugadorDividido";
 	dealCard(playerSplitHand, playerSplitGameBoard);
 
 	// Make split button no longer clickable as in this game you can only split once
@@ -84,7 +84,7 @@ var split = function() {
 	// Shrink the inactive deck to both signal what deck they are playing and to make room on the board
 	setTimeout(function(){
 		scaleDownDeck(playerSplitGameBoard, playerSplitHandTotalDisplay);
-		currentTurn = "player"; 
+		currentTurn = "jugador"; 
 	}, 1000);
 
 }

@@ -15,19 +15,19 @@ function dealCard(hand, location) {
 	} else if (index > 0) {
 		cardImage.appendTo($(location)).offset({left: -60}).css("margin-right", -60).show();	
 	} 
-	if (hand[index].name === "ace" && currentTurn != "dealer") {
+	if (hand[index].name === "as" && currentTurn != "crupier") {
 		playerHasAce = true;
 	}
 	// Note: tried to dry this out by putting totals as a param but couldn't get it working yet
-	if (currentTurn === "player") {
+	if (currentTurn === "jugador") {
 		playerHandTotal += hand[index].value;
-	} else if (currentTurn === "playerSplit") {
+	} else if (currentTurn === "jugadorDividido") {
 		playerSplitHandTotal += hand[index].value;
-	} else if (currentTurn === "dealer") {
+	} else if (currentTurn === "crupier") {
 		dealerHandTotal += hand[index].value;
 	}	
 	// Second card only for dealer should show face down
-	if (dealerHand.length === 2 && currentTurn === "dealer") {
+	if (dealerHand.length === 2 && currentTurn === "crupier") {
 		cardImage.attr("src", "img/card_back.png");
 	}
 	updateVisibleHandTotals();
@@ -36,41 +36,41 @@ function dealCard(hand, location) {
 
 function evaluateGameStatus() {
 	// Player can only split or double down after first 2 cards drawn
-	if (playerHand.length === 3 || dealerStatus === "hit") {
+	if (playerHand.length === 3 || dealerStatus === "pedir") {
 		disableButton(doubleDownButton);
 		disableButton(splitButton);
 	}
-	if (currentTurn != "dealer") {
+	if (currentTurn != "crupier") {
 		if (playerHasAce === true) {
-			if (currentTurn === "player") {  // Dry out by having params in here
+			if (currentTurn === "jugador") {  // Dry out by having params in here
 				reviewAcesValue(playerHand, playerHandTotal);
-			} else if (currentTurn === "playerSplit") {
+			} else if (currentTurn === "jugadorDividido") {
 				reviewAcesValue(playerSplitHand, playerSplitHandTotal);
 			}	
 		} else {
 			isPlayerDone();
 		}
 	}		
-	if (currentTurn === "dealer" && dealerStatus === "hit") {
+	if (currentTurn === "crupier" && dealerStatus === "pedir") {
 		dealerPlay();
 	}
 }
 
 
-// The purpose of this function is to detect when a turn should be shifted without the player
-// needing to click "stand". This is also an important step for determining what the next move
-// is if there is a split deck. 
+// El propósito de esta función es detectar cuándo se debe cambiar un turno sin el jugador
+// necesita hacer clic en "pararse". Este también es un paso importante para determinar cuál es el próximo paso.
+// es si hay un mazo dividido.
 function isPlayerDone() {
 	if (splitGame === false && playerHandTotal >= 21) {
 		gameOver();
 	} else if (splitGame === true) {
-		if (currentTurn === "player") {
+		if (currentTurn === "jugador") {
 			if (playerHandTotal === 21) {
 				gameOver();
 			// If it's a split game, we can't just game over on the first hand if the player goes over
 			} else if (playerHandTotal > 21)
 				changeHand(playerStatus); 
-		} else if (currentTurn === "playerSplit") {
+		} else if (currentTurn === "jugadorDividido") {
 			if (playerSplitHandTotal === 21) {
 				gameOver();
 			} else if (playerSplitHandTotal > 21) {
@@ -86,31 +86,31 @@ function isPlayerDone() {
 }
 
 function changeHand(currentDeckStatus) {
-	currentDeckStatus = "stand";
-	if (currentTurn === "player") {		
+	currentDeckStatus = "pararse";
+	if (currentTurn === "jugador") {		
 		if (splitGame === true) {
-			currentTurn = "playerSplit";
-			// Scale down the player deck as we change turns, but only on split hand
+			currentTurn = "jugadorDividido";
+			// Escala el mazo del jugador a medida que cambiamos de turno, pero solo en la mano dividida
 			scaleDownDeck(playerGameBoard, playerHandTotalDisplay);
 			enlargeDeck(playerSplitGameBoard, playerSplitHandTotalDisplay);
 		} else if (splitGame === false) {
-			currentTurn = "dealer";
-			dealerStatus = "hit";
+			currentTurn = "crupier";
+			dealerStatus = "pedir";
 		}
-	} else if (currentTurn === "playerSplit") {
-		currentTurn = "dealer";
-		dealerStatus = "hit";
+	} else if (currentTurn === "jugadorDividido") {
+		currentTurn = "crupier";
+		dealerStatus = "pedir";
 	}
 	evaluateGameStatus(); 
 }
 
 function reviewAcesValue(hand, total) {	
 	if (total > 21) {
-		// If they have exactly 2 aces in the first draw, prompt them to choose to split or not
+		// Si tienen exactamente 2 ases en el primer sorteo, pídales que elijan dividir o no
 		if (hand.length === 2) {  
 			enableButton(splitButton, split);
 			$("#two-aces-prompt").modal("open");
-		// Otherwise, just reduce the aces value so they are no longer over 21
+		// De lo contrario, solo reduce el valor de los ases para que ya no tengan más de 21
 		} else if (hand.length > 2) {
 			reduceAcesValue(hand);
 			isPlayerDone();
@@ -122,11 +122,11 @@ function reviewAcesValue(hand, total) {
 
 function reduceAcesValue(deck) {
 	for (var i = 0; i < deck.length; i++) {  
-		if (deck[i].name === "ace" && deck[i].value === 11) { // Only focusing on aces that haven't been changed from 11 to 1 already
+		if (deck[i].name === "as" && deck[i].value === 11) { // Solo enfocándonos en los ases que aún no han sido cambiados de 11 a 1
 			deck[i].value = 1;
-			if (currentTurn === "player") {
+			if (currentTurn === "jugador") {
 				playerHandTotal -= 10;
-			} else if (currentTurn === "playerSplit") {
+			} else if (currentTurn === "jugadorDividido") {
 				playerSplitHandTotal -= 10;
 			}
 			updateVisibleHandTotals();
@@ -140,7 +140,7 @@ function dealerPlay() {
 	disableButton(standButton);
 	disableButton(hitButton);
 	disableButton(splitButton);
-	// The below logic is based on standard blackjack rules
+	// La siguiente lógica se basa en las reglas estándar del blackjack
 	if (dealerHandTotal < 17) {
 		setTimeout(function(){
 			dealCard(dealerHand, dealerGameBoard);
@@ -151,7 +151,7 @@ function dealerPlay() {
 		}, 1100);
 	} else if (dealerHandTotal >= 17) {
 		setTimeout(function(){
-			dealerStatus = "stand";
+			dealerStatus = "pararse";
 			gameOver();
 		}, 1100);
 	}
